@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8" />
+  <script src="SQuery.js"></script>
+</head>
+<body>
+  <div class="testClass">Lorem ipsum</div>
+  <p>Some untouched text</p>
+  <div class="testClass hideme">dolor sit amet</div>
+  <div id="showme" style="display:none;">I was hidden!!</div>
+  <p class="deleteme">This should not be shown</p>
+  <p id="deleteme">Some undeleted text</p>
+  <p class="deleteme">This should not be shown</p>
+  <div id="container"></div>
+  <select>
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="mercedes">Mercedes</option>
+    <option value="audi">Audi</option>
+  </select>
+  <div id="container2">Lorem ipsum</div>
+
+  <script type='text/javascript'>
+    //<![CDATA[
+
+    S('.testClass')
+    .attr('lang', 'en')
+    ('title', 'Click me!!')
+    .css('background-color', 'black')
+    ('color', 'white')
+    ('font-style', 'italic')
+    ('width', '100px')
+    ('height', '60px')
+    ('padding', '6px')
+    .html("Inserted Text<br/>")
+    .each(function (el) {
+      var span = document.createElement("span");
+      span.innerHTML = "<br/>Click Me!";
+      el.appendChild(span);
+    })
+    .click(function (evt) {
+      alert(this.className);
+    });
+
+    S(".hideme").hide();
+
+    S("#showme").css("color", "red").show();
+
+    S('.testClass').css('font-style', undefined); //Removes font-style
+
+    if (S("#showme").css("color") == "red")
+      S(".deleteme").remove();
+
+    S("#container").append(S(".testClass").nodes[0].cloneNode(true)).attr("id", "newtest");
+
+    var mydata = JSON.stringify({
+      title: 'foo',
+      body: 'bar',
+      userId: 1
+    });
+
+    S("#newtest").click(function () {
+      S.ajax("post", "http://jsonplaceholder.typicode.com/posts", mydata, function (data) {
+        alert(JSON.stringify(data));
+      }, function (data) {
+        alert("Error: " + data);
+      });
+    });
+
+    S("select").css("margin", "10px").change(function (e) {
+      alert(e.srcElement.value)
+    });
+
+    S("#container2").append(S("<span id='newspan'>Created content</span>"));
+    S("#newspan").css("color", "blue");
+
+    //]]>
+  </script>
+</body>
+</html>
